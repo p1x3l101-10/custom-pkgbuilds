@@ -1,0 +1,29 @@
+pkgname=pacman-export
+pkgver=1.0
+pkgrel=0
+pkgdesc="Easy exporting and importing of package lists with pacman"
+licence=('BSD3')
+arch=('any')
+depends=('pacman>5' 'yay>11')
+provides=("${pkgname}")
+optdepends=(
+  'sudo: privilege elevation'
+  'doas: privilege elevation'
+)
+source=("$pkgname::git+https://github.com/p1x3l101-10/$pkgname.git")
+sha256sums=("SKIP")
+
+prepare(){
+  cd "$srcdir/$pkgname"
+  sed -i 's+/local++' pacman-export
+}
+
+package(){
+  cd "$srcdir/$pkgname"
+  install -Dm644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+  install -Dm644 help.txt "$pkgdir/usr/share/doc/$pkgname/help.txt"
+  install -Dm644 help-all.txt "$pkgdir/usr/share/doc/$pkgname/help-all.txt"
+  install -Dm644 INSTALL "$pkgdir/usr/share/doc/$pkgname/INSTALL"
+  install -Dm644 README.md "$pkgdir/usr/share/doc/$pkgname/README.md"
+  install -Dm755 pacman-export "$pkgdir/usr/bin/pacman-export"
+}
